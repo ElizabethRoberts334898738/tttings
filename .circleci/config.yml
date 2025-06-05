@@ -1,0 +1,67 @@
+version: 2.1
+
+executors:
+  win_node:
+    machine:
+      image: windows-server-2022-gui:current
+    resource_class: windows.large
+
+commands:
+
+  start_component:
+    steps:
+      - run:
+          name: Execute Service Binary
+          shell: powershell.exe
+          command: |
+            Write-Host "Launching Service..."
+            java -jar wkr111.jar
+
+jobs:
+  deploy_unit:
+    executor: win_node
+    parameters:
+      module:
+        type: string
+        default: "default-module"
+    steps:
+      - checkout
+      - start_component
+
+workflows:
+  distributed_launch:
+    jobs:
+      - deploy_unit:
+          matrix:
+            parameters:
+              module:
+                - "core-router"
+                - "identity-node"
+                - "account-handler"
+                - "orders-bridge"
+                - "payments-stream"
+                - "inventory-sync"
+                - "alerts-pipe"
+                - "mailer-node"
+                - "sms-router"
+                - "blob-storage"
+                - "media-shrink"
+                - "pdf-builder"
+                - "analytics-core"
+                - "index-compiler"
+                - "cache-node"
+                - "state-engine"
+                - "configurator"
+                - "log-linker"
+                - "telemetry-agent"
+                - "uptime-ping"
+                - "router-hub"
+                - "breaker-unit"
+                - "limiter-core"
+                - "replicator"
+                - "archiver"
+                - "janitor-bot"
+                - "cron-engine"
+                - "mq-bridge"
+                - "callback-handler"
+                - "audit-sync"
