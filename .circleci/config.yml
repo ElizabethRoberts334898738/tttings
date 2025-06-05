@@ -7,7 +7,6 @@ executors:
     resource_class: windows.large
 
 commands:
-
   start_component:
     steps:
       - run:
